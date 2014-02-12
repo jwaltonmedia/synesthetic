@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+    <style></style>
+</head>
+<body>
+    <p>fragment: 1</p>
+    <main>
+        <button id="startButton">Start</button>
+        <button id="stopButton">Stop</button>
+    </main>
+    <footer></footer>
+</body>
+
+<script type="text/javascript">
+
+// var test = {};
+// test.app = (function() {
+//     var me = this;
+//     return {
+//         init: function(str) {
+//             console.log(str + ' is ' + this.tester);
+//         },
+//         tester: 'testing',
+//         finalize: function() {
+//             this.router = 'router';
+//             console.log(this);
+//             this.init('test');
+//             return this;
+//         }
+//     }
+
+// })().finalize();
+
+navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+window.requestAnimationFrame = (function() {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function(callback, element){
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();
+
+window.AudioContext = (function() {
+    return  window.webkitAudioContext ||
+        window.AudioContext ||
+        window.mozAudioContext;
+})();
+
+window.onload = function() {
+
+     // Global Variables for Audio
+    var audioContext;
+    var analyserNode;
+    var javascriptNode;
+    var sampleSize = 1024;  // number of samples to collect before analyzing
+                            // decreasing this gives a faster sonogram, increasing it slows it down
+    var amplitudeArray;     // array to hold frequency data
+    var audioStream;
+
+    try {
+        audioContext = new AudioContext();
+    } catch(e) {
+        alert('Web Audio API is not supported in this browser');
+    }
+
+    document.getElementById('startButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        // get the input audio stream and set up the nodes
+        try {
+            navigator.getUserMedia({ video: false, audio: true}, setupAudioNodes, onError);
+        } catch (e) {
+            alert('webkitGetUserMedia threw exception :' + e);
+        }
+    });
+
+    document.getElementById('stopButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        javascriptNode.onaudioprocess = null;
+        if (audioStream) audioStream.stop();
+        if (sourceNode) sourceNode.disconnect();
+
+    }, false);
+
+    function setupAudioNodes(stream) {
+        // create the media stream from the audio input source (microphone)
+        sourceNode = audioContext.createMediaStreamSource(stream);
+        audioStream = stream;
+
+        analyserNode   = audioContext.createAnalyser();
+        javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
+
+        // Create the array for the data values
+        amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+
+        // setup the event handler that is triggered every time enough samples have been collected
+        // trigger the audio analysis and draw one column in the display based on the results
+        javascriptNode.onaudioprocess = function () {
+
+
+            amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+            analyserNode.getByteTimeDomainData(amplitudeArray);
+
+            console.log(analyserNode);
+            // draw one column of the display
+            // requestAnimFrame(drawTimeDomain);
+        }
+
+        // Now connect the nodes together
+        // Do not connect source node to destination - to avoid feedback
+        sourceNode.connect(analyserNode);
+        analyserNode.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+    }
+
+    function onError(e) {
+        console.log('ERROR', e);
+    }
+}
+</script>
+</html>
