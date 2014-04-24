@@ -2,28 +2,22 @@
 // There usage will become more apparent further along in the tutorial.
 require.config({
     paths: {
-        // jquery: 'lib/jquery-1.10.2',
-        // lodash: 'lib/lodash-2.4.1',
-        // backbone: 'lib/backbone-1.1',
-        // marionette: 'lib/marionette-1.6.2',
-        // handlebars: 'lib/handlebars.runtime-v1.3.0'
-        // text: 'libs/require/text'
+        jquery: 'vendor/jquery',
+        lodash: 'vendor/lodash',
+        backbone: 'vendor/backbone',
+        handlebars: 'vendor/handlebars.runtime-v1.3.0'
     },
     shim: {
-        // jquery: {
-        //     exports: '$'
-        // },
-        // lodash: {
-        //     exports: '_'
-        // },
-        // backbone: {
-        //     deps: ['jquery', 'lodash'],
-        //     exports: 'Backbone'
-        // },
-        // marionette: {
-        //     deps: ['backbone'],
-        //     exports: 'Marionette'
-        // },
+        jquery: {
+            exports: '$'
+        },
+        lodash: {
+            exports: '_'
+        },
+        backbone: {
+            deps: ['jquery', 'lodash'],
+            exports: 'Backbone'
+        },
         handlebars: {
             exports: 'Handlebars',
             init: function() {
@@ -42,7 +36,7 @@ require([
     // The "app" dependency is passed in as "App"
     //no longer a need to add to global namespace!
     // window.App = App;
-
+    App.init();
     //
 
 });

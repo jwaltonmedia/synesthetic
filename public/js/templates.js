@@ -9,7 +9,7 @@ define(['handlebars'], function(Handlebars) {
 
 
 
-        return "<p>home</p>";
+        return "<canvas id=\"viz\"></canvas>\n<article>\n    <h1>let's get started... shall we?</h1>\n    <p>i can interprete the sounds around me but, i see sounds as images.  want to see?  just let me know when you're ready.</p>\n    <a class=\"listener\" href=\"/\">start</a>\n</article>";
     });
 
     this["synth"]["main"] = Handlebars.template(function(Handlebars, depth0, helpers, partials, data) {
@@ -69,7 +69,7 @@ define(['handlebars'], function(Handlebars) {
 
 
 
-        return "<p>footer</p>";
+        return "<footer><pre>I see what you say</pre></footer>";
     });
 
     this["synth"]["global_head"] = Handlebars.template(function(Handlebars, depth0, helpers, partials, data) {
@@ -123,7 +123,7 @@ define(['handlebars'], function(Handlebars) {
 
 
 
-        return "<p>header</p>";
+        return "<header>\n    <h1><pre><code>s.y.n.e.s.t.h.e.t.i.c</code></pre></h1>\n</header>";
     });
 
     this["synth"]["global_scripts"] = Handlebars.template(function(Handlebars, depth0, helpers, partials, data) {

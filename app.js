@@ -3,7 +3,6 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     exphbs = require("express3-handlebars"),
-
     mongoose = require('mongoose');
 
 var app = express();
@@ -28,6 +27,7 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.methodOverride());
+    app.use(express.compress());
     app.use(express.static(path.join(__dirname, '/public/')));
     app.use(app.router);
     app.use(function(req, res) {
@@ -49,7 +49,6 @@ require('./routes')(app, app.db);
 app.get('*', function(req, res) {
     res.redirect('/');
 });
-
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
