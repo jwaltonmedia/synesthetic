@@ -40,6 +40,12 @@ define([
 
             Canvas.loop(frequencyArray);
 
+            // var total = 0;
+            // for (var i = 0; i < 80; i++) { // get the volume from the first 80 bins, else it gets too loud with treble
+            //     total += self.streamData[i];
+            // }
+            // self.volume = total;
+
         };
 
         // // Now connect the nodes together
