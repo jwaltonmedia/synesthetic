@@ -21,19 +21,23 @@ define([
         ctx: null,
         centerX: 0,
         centerY: 0,
+        clearAll: function() {
+            if (!context) return;
+            context.clearRect(0, 0, this.element.width, this.element.height);
+        },
         drawCircle: function(radius) {
             radius = radius || 0;
             context.save();
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
             context.closePath();
-            context.fillStyle = '#e6e7e8';
+            context.fillStyle = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
             context.fill();
             context.restore();
         },
         loop: function(arrayOfValues) {
             var me = this;
-            context.clearRect(0, 0, this.element.width, this.element.height);
+            this.clearAll();
             $.each(arrayOfValues, function(i, v) {
                 me.drawCircle(v);
             });

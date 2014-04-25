@@ -22,29 +22,31 @@ define([
     var source,
         analizer,
         processor,
+        permission = false,
+        audioStream,
         audioContext = new AudioContext();
 
     Canvas.setup($('#viz')[0]);
 
     function setupAudio(stream) {
-
         // create the media stream from the audio input source (microphone)
         source = audioContext.createMediaStreamSource(stream);
         analyzer = audioContext.createAnalyser();
-        processor = audioContext.createScriptProcessor(1024, 1, 1); // 1024 - number of samples to collect before analyzing
+        processor = audioContext.createScriptProcessor(512, 1, 1); // 512 - number of samples to collect before analyzing
         processor.onaudioprocess = function() {
 
             var frequencyArray = new Uint8Array(analyzer.frequencyBinCount);
             analyzer.getByteFrequencyData(frequencyArray);
             // animate using the data
 
-            Canvas.loop(frequencyArray);
+            //Canvas.loop(frequencyArray);
 
-            // var total = 0;
-            // for (var i = 0; i < 80; i++) { // get the volume from the first 80 bins, else it gets too loud with treble
-            //     total += self.streamData[i];
-            // }
-            // self.volume = total;
+            var total = 0;
+            for (var i = 0; i < frequencyArray.length; i++) { // get the volume from the first 80 bins, else it gets too loud with treble
+                total += frequencyArray[i];
+            }
+            Canvas.clearAll();
+            Canvas.drawCircle(total / (512 / 2));
 
         };
 
@@ -55,19 +57,37 @@ define([
         processor.connect(audioContext.destination);
     }
 
+    function audioStop() {
+        if (processor) processor.onaudioprocess = null;
+        if (source) source.disconnect();
+    }
+
     function onError(e) {
         console.log('ERROR', err);
     }
 
     function getMediaPermission() {
-        try {
-            navigator.getUserMedia({
-                video: false,
-                audio: true
-            }, setupAudio, onError);
-        } catch (err) {
-            alert('getUserMedia threw exception :' + err);
+        if (permission) {
+            audioStop();
+            setupAudio(audioStream);
+        } else {
+            try {
+                navigator.getUserMedia({
+                    video: false,
+                    audio: true
+                }, function(stream) {
+                    audioStream = stream;
+                    permission = true;
+                    setupAudio(audioStream);
+                }, function() {
+                    permission = false;
+                    onError();
+                });
+            } catch (err) {
+                alert('getUserMedia threw exception :' + err);
+            }
         }
+        return permission;
     }
 
     function onclick_listener(e) {
@@ -76,8 +96,7 @@ define([
         if (target.hasClass('on')) {
             target.text('start');
             target.removeClass('on');
-            if (processor) processor.onaudioprocess = null;
-            if (source) source.disconnect();
+            audioStop();
         } else {
             target.addClass('on');
             getMediaPermission();
