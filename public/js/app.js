@@ -1,7 +1,7 @@
 define([
     'jquery',
-    'draw'
-], function($, Draw) {
+    'canvas'
+], function($, Canvas) {
 
     navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
     window.requestAnimationFrame = (function() {
@@ -24,6 +24,8 @@ define([
         processor,
         audioContext = new AudioContext();
 
+    Canvas.setup($('#viz')[0]);
+
     function setupAudio(stream) {
 
         // create the media stream from the audio input source (microphone)
@@ -35,9 +37,9 @@ define([
             var frequencyArray = new Uint8Array(analyzer.frequencyBinCount);
             analyzer.getByteFrequencyData(frequencyArray);
             // animate using the data
-            requestAnimationFrame(function() {
-                Draw.usingArrayOfValues(frequencyArray);
-            });
+
+            Canvas.loop(frequencyArray);
+
         };
 
         // // Now connect the nodes together
