@@ -37,6 +37,7 @@ define([
             context.clearRect(0, 0, this.element.width, this.element.height);
 
             // var arrLength = frequency.length;
+            //TODO: make use of Frequency data in visualization
 
             //large circle radius
             var lg_radius = volume;
