@@ -37,4 +37,4 @@ Navigate to: `localhost:3000`.
 You should be in business.
 
 ## contributing ##
-The only rule here is...
+The only rule here is... maintain the 'synesthetic' theme. [Please reference](http://en.wikipedia.org/wiki/Synesthesia)
