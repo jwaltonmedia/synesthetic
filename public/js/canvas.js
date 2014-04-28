@@ -52,8 +52,6 @@ define([
 
             var num_of_circ = Math.round(lg_circ / sm_circ_diameter);
 
-            console.log(num_of_circ);
-
             //if, for some reason, the radius is NaN, return
             if (isNaN(sm_circ_radius)) return;
 
