@@ -23,8 +23,10 @@ define([
         analizer,
         processor,
         permission = false,
+        playing = false,
         audioStream,
-        audioContext = new AudioContext();
+        audioContext = new AudioContext(),
+        frequencyArray = [];
 
     Canvas.setup($('#viz')[0]);
 
@@ -33,33 +35,36 @@ define([
         source = audioContext.createMediaStreamSource(stream);
         analyzer = audioContext.createAnalyser();
         processor = audioContext.createScriptProcessor(512, 1, 1); // 512 - number of samples to collect before analyzing
-        processor.onaudioprocess = function() {
 
-            var frequencyArray = new Uint8Array(analyzer.frequencyBinCount);
-            analyzer.getByteFrequencyData(frequencyArray);
-            // animate using the data
-
-            //Canvas.loop(frequencyArray);
-
-            var total = 0;
-            for (var i = 0; i < frequencyArray.length; i++) { // get the volume from the first 80 bins, else it gets too loud with treble
-                total += frequencyArray[i];
+        (function drawAudio() {
+            window.requestAnimationFrame(drawAudio);
+            if (playing && frequencyArray.length) {
+                var total = 0;
+                for (var i = 0; i < frequencyArray.length; i++) {
+                    total += frequencyArray[i];
+                }
+                Canvas.clearAll();
+                Canvas.vis1(frequencyArray, total / (512 / 2));
             }
-            Canvas.clearAll();
-            Canvas.drawCircle(total / (512 / 2));
+        })();
 
+        processor.onaudioprocess = function() {
+            frequencyArray = new Uint8Array(analyzer.frequencyBinCount);
+            analyzer.getByteFrequencyData(frequencyArray);
         };
 
-        // // Now connect the nodes together
-        // // Do not connect source node to destination - to avoid feedback
+        // Now connect the nodes together
+        // Do not connect source node to destination - to avoid feedback
         source.connect(analyzer);
         analyzer.connect(processor);
         processor.connect(audioContext.destination);
+        playing = true;
     }
 
     function audioStop() {
         if (processor) processor.onaudioprocess = null;
         if (source) source.disconnect();
+        playing = false;
     }
 
     function onError(e) {
