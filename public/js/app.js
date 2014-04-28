@@ -20,13 +20,15 @@ define([
     })();
 
     var source,
-        analizer,
+        analyzer,
         processor,
         permission = false,
         playing = false,
         audioStream,
+        outputBuffer = null,
         audioContext = new AudioContext(),
-        frequencyArray = [];
+        frequencyArray = [],
+        timeDomain = [];
 
     Canvas.setup($('#viz')[0]);
 
@@ -38,19 +40,23 @@ define([
 
         (function drawAudio() {
             window.requestAnimationFrame(drawAudio);
-            if (playing && frequencyArray.length) {
+            if (playing && outputBuffer) {
                 var total = 0;
                 for (var i = 0; i < frequencyArray.length; i++) {
                     total += frequencyArray[i];
                 }
                 Canvas.clearAll();
-                Canvas.vis1(frequencyArray, total / (512 / 2));
+                Canvas.vis2(outputBuffer, total / (512 / 2), audioContext);
+                // Canvas.vis1(frequencyArray, total / (512 / 2), timeDomain);
             }
         })();
 
-        processor.onaudioprocess = function() {
+        processor.onaudioprocess = function(processingEvent) {
+            outputBuffer = processingEvent.outputBuffer;
             frequencyArray = new Uint8Array(analyzer.frequencyBinCount);
+            timeDomain = new Uint8Array(analyzer.frequencyBinCount);
             analyzer.getByteFrequencyData(frequencyArray);
+            analyzer.getByteTimeDomainData(timeDomain);
         };
 
         // Now connect the nodes together

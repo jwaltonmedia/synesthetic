@@ -32,10 +32,11 @@ define([
          * @param {Number} volume
          */
 
-        vis1: function(frequency, volume) {
+        vis1: function(frequency, volume, timeDomain) {
             var me = this,
                 pos = 0,
-                inc = this.element.width / frequency.length,
+                fl = frequency.length,
+                inc = this.element.width / fl,
                 color = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")",
                 i, j;
             context.clearRect(0, 0, this.element.width, this.element.height);
@@ -68,20 +69,66 @@ define([
                 var y = centerY + Math.sin(angle) * volume;
                 context.arc(x, y, sm_circ_radius, 0, 360, false);
                 context.fillStyle = color;
+                context.globalAlpha = 0.3;
                 context.fill();
             }
 
             //create the frequency
-            for (i = 0, j = frequency.length; i < j; i++) {
+            for (i = 0, j = fl; i < j; i++) {
                 var freq = frequency[i];
                 context.beginPath();
                 context.rect(pos, centerY - (freq / 2), inc, freq);
+                context.globalAlpha = 1;
                 context.fillStyle = color;
                 context.fill();
                 pos += inc;
             }
+
+            //create the waveform
+            for (i = 0, j = fl; i < j; i++) {
+                var td = timeDomain[i];
+                var percent = td / 256;
+                var height = this.element.height * percent;
+                var offset = this.element.height - height - 1;
+                var barWidth = this.element.width / fl;
+                context.fillStyle = 'black';
+                context.fillRect(i * barWidth, offset, 1, 1);
+            }
         },
 
+        /*
+         * VIS2 - takes the output buffer from an audio signal and draws a sinewave
+         * @param {Array} buffer - output buffer from audio analyzer
+         * @param {Array} freq - frequency
+         * @param {Array} vol - volume of audio signal
+         */
+
+        vis2: function(buffer, vol, audioContext) {
+            if (!vol) return;
+            var channel = 0;
+            var freq = 440;
+            var numOfChannels = buffer.numberOfChannels;
+            for (; channel < numOfChannels; channel++) {
+                var data = buffer.getChannelData(channel);
+                var bufferLength = buffer.length;
+                var inc = this.element.width / data.length;
+                var positionX = 0;
+                for (var sample = 0; sample < bufferLength; sample++) {
+
+                    // The time at which the sample will play
+                    var sampleTime = audioContext.currentTime + buffer.duration * sample / bufferLength;
+
+                    // Set the data in the output buffer for each sample
+                    data[sample] = vol * Math.sin(sampleTime * freq * Math.PI * 2);
+                }
+                for (var i = 0, j = data.length; i < j; i++) {
+                    var d = data[i];
+                    context.fillRect(positionX, centerY + d, inc, inc);
+                    positionX += inc;
+                }
+            }
+
+        },
         setup: function(element, opt) {
             opt = opt || {};
             this.element = element;
