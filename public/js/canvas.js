@@ -33,7 +33,11 @@ define([
          */
 
         vis1: function(frequency, volume) {
-            var me = this;
+            var me = this,
+                pos = 0,
+                inc = this.element.width / frequency.length,
+                color = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")",
+                i, j;
             context.clearRect(0, 0, this.element.width, this.element.height);
 
             // var arrLength = frequency.length;
@@ -57,14 +61,24 @@ define([
             if (isNaN(sm_circ_radius)) return;
 
             //create the circles
-            for (var i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
+            for (i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
                 context.beginPath();
                 var angle = i * 2 * Math.PI / volume;
                 var x = centerX + Math.cos(angle) * volume;
                 var y = centerY + Math.sin(angle) * volume;
                 context.arc(x, y, sm_circ_radius, 0, 360, false);
-                context.fillStyle = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
+                context.fillStyle = color;
                 context.fill();
+            }
+
+            //create the frequency
+            for (i = 0, j = frequency.length; i < j; i++) {
+                var freq = frequency[i];
+                context.beginPath();
+                context.rect(pos, centerY - (freq / 2), inc, freq);
+                context.fillStyle = color;
+                context.fill();
+                pos += inc;
             }
         },
 

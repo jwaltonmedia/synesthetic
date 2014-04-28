@@ -37,6 +37,35 @@ require([
     //no longer a need to add to global namespace!
     // window.App = App;
     App.init();
-    //
+
+    // var arr = [{
+    //     h: 2,
+    //     s: 4,
+    //     l: 5
+    // }, {
+    //     h: 2,
+    //     s: 6,
+    //     l: 7
+    // }, {
+    //     h: 1,
+    //     s: 9,
+    //     l: 10
+    // }];
+
+    // function handleWind(windStrength) {
+    //     var distance = 0;
+    //     var fallenTrees = [];
+    //     for (var i = 0, j = arr.length; i < j; i++) {
+    //         var tree = arr[i];
+    //         if (distance && distance >= tree.l || tree.s <= windStrength) {
+    //             distance = tree.l + tree.h;
+    //             fallenTrees.push(tree);
+    //         }
+    //     }
+    //     return fallenTrees;
+    // }
+
+    // console.log(handleWind(4));
+    // //
 
 });
