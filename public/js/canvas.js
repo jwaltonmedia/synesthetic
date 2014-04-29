@@ -37,8 +37,8 @@ define([
                 pos = 0,
                 fl = frequency.length,
                 inc = this.element.width / fl,
-                color = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")",
-                i, j;
+                color = '#369',
+                i, j, angle, x, y;
             context.clearRect(0, 0, this.element.width, this.element.height);
 
             // var arrLength = frequency.length;
@@ -56,33 +56,43 @@ define([
             //small circle radius
             var sm_circ_radius = sm_circ_diameter / 2;
 
-            var num_of_circ = Math.round(lg_circ / sm_circ_diameter);
+            var num_of_circ = Math.round(lg_circ / sm_circ_radius);
 
             //if, for some reason, the radius is NaN, return
             if (isNaN(sm_circ_radius)) return;
 
-            //create the circles
-            for (i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
-                context.beginPath();
-                var angle = i * 2 * Math.PI / volume;
-                var x = centerX + Math.cos(angle) * volume;
-                var y = centerY + Math.sin(angle) * volume;
-                context.arc(x, y, sm_circ_radius, 0, 360, false);
-                context.fillStyle = color;
-                context.globalAlpha = 0.3;
-                context.fill();
-            }
+            // create the circles
+            // for (i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
+            //     context.beginPath();
+            //     angle = i * 2 * Math.PI / volume;
+            //     x = centerX + Math.cos(angle) * volume;
+            //     y = centerY + Math.sin(angle) * volume;
+            //     context.arc(x, y, sm_circ_radius, 0, 360, false);
+            //     context.fillStyle = "#999";
+            //     context.globalAlpha = 0.3;
+            //     context.fill();
+            // }
 
             //create the frequency
+
+
             for (i = 0, j = fl; i < j; i++) {
+
                 var freq = frequency[i];
+                if (!freq) continue;
+                var rectW = inc;
+                var rectH = freq === 0 ? i : freq + this.element.height / 3;
+                context.save();
                 context.beginPath();
-                context.rect(pos, centerY - (freq / 2), inc, freq);
-                context.globalAlpha = 1;
-                context.fillStyle = color;
-                context.fill();
-                pos += inc;
+                angle = i * 2 * Math.PI / 360;
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.fillStyle = "#333";
+                context.fillRect(0, 0, -rectW, -rectH);
+                context.restore();
+
             }
+
 
             //create the waveform
             for (i = 0, j = fl; i < j; i++) {

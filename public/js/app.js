@@ -48,8 +48,8 @@ define([
                     total += frequencyArray[i];
                 }
                 Canvas.clearAll();
-                Canvas.vis2(outputBuffer, total / (512 / 2), audioContext);
-                // Canvas.vis1(frequencyArray, total / (512 / 2), timeDomain);
+                //Canvas.vis2(outputBuffer, total / (512 / 2), audioContext);
+                Canvas.vis1(frequencyArray, total / (512 / 2), timeDomain);
             }
         })();
 
