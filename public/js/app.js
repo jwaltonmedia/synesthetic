@@ -31,13 +31,15 @@ define([
         timeDomain = [];
 
     Canvas.setup($('#viz')[0]);
+    var audio = $('#audio');
 
     function setupAudio(stream) {
         // create the media stream from the audio input source (microphone)
         source = audioContext.createMediaStreamSource(stream);
         analyzer = audioContext.createAnalyser();
         processor = audioContext.createScriptProcessor(512, 1, 1); // 512 - number of samples to collect before analyzing
-
+        var gainNode = audioContext.createGainNode();
+        gainNode.gain.value = 0.0;
         (function drawAudio() {
             window.requestAnimationFrame(drawAudio);
             if (playing && outputBuffer) {
@@ -63,7 +65,8 @@ define([
         // Do not connect source node to destination - to avoid feedback
         source.connect(analyzer);
         analyzer.connect(processor);
-        processor.connect(audioContext.destination);
+        processor.connect(gainNode);
+        gainNode.connect(audioContext.destination);
         playing = true;
     }
 

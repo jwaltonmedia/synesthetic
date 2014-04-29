@@ -9,7 +9,7 @@ define(['handlebars'], function(Handlebars) {
 
 
 
-        return "<canvas id=\"viz\"></canvas>\n<article>\n    <h1>let's get started... shall we?</h1>\n    <p>i can interprete the sounds around me but, i see sounds as images.  want to see?  just let me know when you're ready.</p>\n    <a class=\"listener\" href=\"/\">start</a>\n</article>";
+        return "<canvas id=\"viz\"></canvas>\n<article>\n    <h1>let's get started... shall we?</h1>\n    <p>i can interprete the sounds around me but, i see sounds as images.  want to see?  just let me know when you're ready.</p>\n    <a class=\"listener\" href=\"/\">start</a>\n    <audio src=\"\" id=\"audio\"></audio>\n</article>";
     });
 
     this["synth"]["main"] = Handlebars.template(function(Handlebars, depth0, helpers, partials, data) {
