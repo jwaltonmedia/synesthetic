@@ -9,7 +9,11 @@ var app = express();
 
 app.set('mongodb-uri', process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/synesthetic');
 
-app.db = mongoose.connect(app.get('mongodb-uri'));
+app.db = mongoose.connect(app.get('mongodb-uri'), function(err) {
+    if (err) {
+        throw 'Database is down... Please restart';
+    }
+});
 
 app.configure(function() {
     app.set('port', process.env.PORT || 3000);
