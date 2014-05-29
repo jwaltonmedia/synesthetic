@@ -61,17 +61,17 @@ define([
             //if, for some reason, the radius is NaN, return
             if (isNaN(sm_circ_radius)) return;
 
-            // create the circles
-            // for (i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
-            //     context.beginPath();
-            //     angle = i * 2 * Math.PI / volume;
-            //     x = centerX + Math.cos(angle) * volume;
-            //     y = centerY + Math.sin(angle) * volume;
-            //     context.arc(x, y, sm_circ_radius, 0, 360, false);
-            //     context.fillStyle = "#999";
-            //     context.globalAlpha = 0.3;
-            //     context.fill();
-            // }
+            //create the circles
+            for (i = 0; i < (num_of_circ * sm_circ_radius); i += (sm_circ_diameter / num_of_circ)) {
+                context.beginPath();
+                angle = i * 2 * Math.PI / volume;
+                x = centerX + Math.cos(angle) * volume;
+                y = centerY + Math.sin(angle) * volume;
+                context.arc(x, y, sm_circ_radius, 0, 360, false);
+                context.fillStyle = "#999";
+                context.globalAlpha = 0.3;
+                context.fill();
+            }
 
             //create the frequency
 

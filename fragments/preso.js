@@ -18,16 +18,29 @@ function presentation(rules) {
 }
 
 
-$.ajax({
-    url: 'style.css',
-    success: function(res) {
-        console.log(res);
-        presentation(res);
-    },
-    error: function(res) {
-        console.log('error', res);
-    }
-});
+// $.ajax({
+//     url: 'style.css',
+//     success: function(res) {
+//         console.log(res);
+//         presentation(res);
+//     },
+//     error: function(res) {
+//         console.log('error', res);
+//     }
+// });
+
+
+    // var fn = function(str) {
+    //     if (typeof str !== 'string') throw "Mismatched type error";
+    //     this.str = str + ' is a string';
+    //     return this;
+    // }
+
+    // fn.prototype.concat = function() {
+    //     return this.str + ' concatinated!!';
+    // }
+
+    // console.log(new fn('test').concat());
 
 });
 
