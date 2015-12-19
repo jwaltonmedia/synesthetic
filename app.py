@@ -11,7 +11,7 @@ thread = None
 
 def getLightValue():
     while True:
-        time.sleep(10)
+        time.sleep(1)
         socketio.emit('response', {'data': getReading()}, namespace='/test')
 
 @app.route("/")
