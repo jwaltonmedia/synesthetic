@@ -1,12 +1,12 @@
-from flask import Flask, request
+import flask
 from bin.readpin import getReading
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 @app.route("/")
 def hello():
     reading = str(getReading())
-    return Flask.render_template('index.html', reading=reading)
+    return flask.render_template('index.html', reading=reading)
 
 @app.route("/synesthetic")
 def synesthetic():
