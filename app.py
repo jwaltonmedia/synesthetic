@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     reading = str(getReading())
-    return "Hello! This is a raspberry pi. I belong to James Walton. Current reading is: " + reading
+    return flask.render_templatea('index.html', reading=reading)
 
 @app.route("/synesthetic")
 def synesthetic():
