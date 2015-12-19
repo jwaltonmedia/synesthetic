@@ -17,6 +17,7 @@ socket.on('light', function (msg) {
   var value = msg.data;
   var newRgb = getRgbFromInt(value, 3);
   document.getElementsByTagName("body")[0].setAttribute('style', 'background:' + newRgb);
+  document.getElementById('value').innerHTML(value);
 });
 
 socket.on('connect', function (msg) {
