@@ -3,8 +3,25 @@ var connectUrl = 'http://' + document.domain + ':' + location.port + namespace;
 
 var socket = io.connect(connectUrl);
 
-socket.on('response', function (msg) {
-  console.log(msg);
+function getRgbFromInt(integer, n) {
+  var str = integer.toString();
+  var rgb = [255, 255, 255]; //pure white
+
+  for (var i = 0, len = str.length; i < len; i += n) {
+    rbg[i] = Number(str.substr(i, n));
+  }
+
+  return rgb;
+};
+
+socket.on('light', function (msg) {
+  var value = msg.data;
+  var newRgb = getRgbFromInt(value, 3);
+  if (newRgb.length > 3) {
+    console.log('BLACK');
+  } else {
+    console.log(newRgb);
+  }
 });
 
 socket.on('connect', function (msg) {
