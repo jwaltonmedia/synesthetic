@@ -8,7 +8,7 @@ function getRgbFromInt(integer, n) {
   var rgb = [255, 255, 255]; //pure white
 
   for (var i = 0, len = str.length; i < len; i += n) {
-    rbg[i] = Number(str.substr(i, n));
+    rgb[i] = Number(str.substr(i, n));
   }
 
   return rgb;

@@ -3,3 +3,7 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   color: #ccc;
 }
+
+h1.synth {
+  color: #fff;
+}
