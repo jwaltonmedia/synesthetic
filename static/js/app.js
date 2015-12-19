@@ -16,7 +16,7 @@ function getRgbFromInt(i) {
 socket.on('light', function (msg) {
   var value = msg.data;
   var newRgb = getRgbFromInt(value, 3);
-  document.getElementsByTagName("body")[0].style = ('background-color:' + newRgb);
+  document.getElementsByTagName("body")[0].style.backgroundColor = newRgb;
 });
 
 socket.on('connect', function (msg) {
