@@ -3,6 +3,9 @@ var connectUrl = 'http://' + document.domain + ':' + location.port + namespace;
 
 var socket = io.connect(connectUrl);
 
+var bodyEl = document.getElementsByTagName("body")[0];
+var valueEl = document.getElementById('value');
+
 function getRgbFromInt(i) {
   var vals = {
     r: (i & 0xff0000) >> 16,
@@ -16,8 +19,8 @@ function getRgbFromInt(i) {
 socket.on('light', function (msg) {
   var value = msg.data;
   var newRgb = getRgbFromInt(value, 3);
-  document.getElementsByTagName("body")[0].setAttribute('style', 'background:' + newRgb);
-  document.getElementById('value').innerHTML(value);
+  bodyEl.setAttribute('style', 'background:' + newRgb);
+  valueEl.innerHTML = value;
 });
 
 socket.on('connect', function (msg) {
