@@ -1,6 +1,6 @@
 import flask
 import time
-from flask.ext.socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 from bin.readpin import getReading
 from threading import Thread
 
