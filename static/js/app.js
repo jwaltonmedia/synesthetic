@@ -3,25 +3,20 @@ var connectUrl = 'http://' + document.domain + ':' + location.port + namespace;
 
 var socket = io.connect(connectUrl);
 
-function getRgbFromInt(integer, n) {
-  var str = integer.toString();
-  var rgb = [255, 255, 255]; //pure white
+function getRgbFromInt(i, ) {
+  var vals = {
+    r: (i & 0xff0000) >> 16,
+    g: (i & 0x00ff00) >> 8,
+    b: (i & 0x0000ff)
+  };
 
-  for (var i = 0, len = str.length; i < len; i += n) {
-    rgb[i] = Number(str.substr(i, n));
-  }
-
-  return rgb;
+  return "rbg(" + vals.r + "," + vals.g + "," + vals.b + ")";
 };
 
 socket.on('light', function (msg) {
   var value = msg.data;
   var newRgb = getRgbFromInt(value, 3);
-  if (newRgb.length > 3) {
-    console.log('BLACK', newRgb, value);
-  } else {
-    console.log(newRgb, value);
-  }
+  document.getElementsByTagName("body")[0].style = ('background-color:' + newRgb);
 });
 
 socket.on('connect', function (msg) {
