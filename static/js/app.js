@@ -3,7 +3,7 @@ var connectUrl = 'http://' + document.domain + ':' + location.port + namespace;
 
 var socket = io.connect(connectUrl);
 
-function getRgbFromInt(i, ) {
+function getRgbFromInt(i) {
   var vals = {
     r: (i & 0xff0000) >> 16,
     g: (i & 0x00ff00) >> 8,
