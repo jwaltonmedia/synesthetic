@@ -8,6 +8,7 @@ body {
   color: #ccc;
   margin: 0;
   padding: 10px;
+  transition: background-color 1s ease, 
 }
 
 .synth {
