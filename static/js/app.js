@@ -18,9 +18,9 @@ socket.on('light', function (msg) {
   var value = msg.data;
   var newRgb = getRgbFromInt(value, 3);
   if (newRgb.length > 3) {
-    console.log('BLACK');
+    console.log('BLACK', value);
   } else {
-    console.log(newRgb);
+    console.log(newRgb, value);
   }
 });
 
