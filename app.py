@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
     reading = str(getReading())
-    return Flask.render_templatea('index.html', reading=reading)
+    return Flask.render_templates('index.html', reading=reading)
 
 @app.route("/synesthetic")
 def synesthetic():
