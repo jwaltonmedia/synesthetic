@@ -7,6 +7,7 @@ from threading import Thread
 app = flask.Flask(__name__)
 app.config['SECRET_KEY'] = 's.y.n.e.s.t.h.e.t.i.c'
 socketio = SocketIO(app)
+thread = None
 
 def getLightValue():
     while True:
