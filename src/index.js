@@ -7,7 +7,7 @@ const app = express()
 const server = http.createServer(app)
 const io = require('socket.io')(server)
 const spawn = require('child_process').spawn
-const { NODE_PORT } = process.env
+const NODE_PORT = 3333
 
 app.set('view engine', 'ejs')
 app.use('/', express.static(path.join(__dirname, 'stream')));
@@ -22,13 +22,13 @@ io.on('connection', socket => {
 
   console.log(`socket connected: ${socket.id}`)
 
-  fs.watchFile('./stream/image_stream.jpg', (current, previous) => {
-    socket.emit('liveStream', 'image_stream.jpg?_t=' + (Math.random() * 100000));
+  fs.watchFile('./stream/image.jpg', (current, previous) => {
+    socket.emit('liveStream', 'image.jpg?_t=' + (Math.random() * 100000));
   })
 
   socket.on('disconnect', () => {
     console.log('socket disconnected')
-    fs.unwatchFile('./stream/image_stream.jpg')
+    fs.unwatchFile('./stream/image.jpg')
   })
 
 })
