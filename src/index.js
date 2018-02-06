@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 app.use('/', express.static(path.join(__dirname, 'stream')));
 app.get('/', (req, res) => res.render('index'))
 
-const args = ['-w', '320', '-h', '240', '-o', './stream/image.jpg', '-t', '999999999', '-tl', '100'];
+const args = ['-w', '320', '-h', '240', '-o', './stream/image.jpg', '-t', '999999999', '-tl', '10'];
 const proc = spawn('raspistill', args);
 
 io.on('connection', socket => {
