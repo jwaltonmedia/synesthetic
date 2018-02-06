@@ -5,7 +5,7 @@ services:
   app:
     environment:
       - NODE_ENV=development
-      - NODE_PORT=33333
+      - NODE_PORT=3333
     ports:
       - '3333:3333'
     build:

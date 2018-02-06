@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Live Streaming Video</title>
+</head>
+<body>
+  <img src="" id="stream" />
+  <button onclick="startStream()">Start</button>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    console.log(socket);
+
+    var image = document.getElementById('stream');
+
+    socket.on('liveStream', function(data) {
+      image.setAttribute('src', data);
+    });
+
+  </script>
+</body>
+</html>
