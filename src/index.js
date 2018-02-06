@@ -6,7 +6,7 @@ const ejs = require('ejs')
 const app = express()
 const server = http.createServer(app)
 const io = require('socket.io')(server)
-const spawn = require('child-process').spawn
+const spawn = require('child_process').spawn
 const { NODE_PORT } = process.env
 
 app.set('view engine', 'ejs')

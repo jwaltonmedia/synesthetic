@@ -6,6 +6,7 @@ RUN apt-get install -y lsof
 RUN apt-get install -y nano
 
 RUN mkdir /src
+RUN chmod +x docker-entrypoint.sh
 
 COPY ./src/package.json /src
 WORKDIR /src
