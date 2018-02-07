@@ -12,6 +12,8 @@ const spawn = require('child_process').spawn
 const NODE_PORT = 3333
 
 const args = [
+  '-v',
+  '-m',
   'autovideosrc',
   'horizontal-speed=1',
   'is-live=true',
@@ -49,7 +51,7 @@ const args = [
   'port=9001',
   'sync-method=2'
 ]
-const gstreamer = spawn('gst-launch-1.0 -v -m', args, { stdio: 'inherit' })
+const gstreamer = spawn('gst-launch-1.0', args, { stdio: 'inherit' })
 
 gstreamer.on('exit', code => {
   if (code !== null) {
