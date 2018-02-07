@@ -56,9 +56,9 @@
 
   socket.on('liveStream', function(data) {
     if (buffer.updating || queue.length > 0) {
-      queue.push(e.data)
+      queue.push(data)
     } else {
-      buffer.appendBuffer(e.data)
+      buffer.appendBuffer(data)
     }
   })
 
