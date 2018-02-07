@@ -72,7 +72,7 @@ io.on('connection', socket => {
         // res.end()
       })
       gs_socket.on('data', data => {
-        io.sockets.emit('liveStream', data)
+        io.sockets.emit('liveStream', data.toString())
       })
     })
 
