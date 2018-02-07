@@ -26,9 +26,6 @@ const args = [
   'queue',
   'leaky=1',
   '!',
-  'queue',
-  'leaky=1',
-  '!',
   'm.',
   'webmmux',
   'name=m',
@@ -55,30 +52,34 @@ app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.render('index'))
 
 let connections = 0
+let streamStarted = false
 
 io.on('connection', socket => {
   console.log('connection made to socket server')
 
   connections++
+
   socket.on('disconnect', () => {
     connections--
   })
-})
 
-const gs_socket = net.connect(9001, () => {
-  gs_socket.on('close', error => {
-    console.log(`gs socket closed =>>>`, error)
-    // res.end()
-  })
-  gs_socket.on('data', data => {
-    if (connections > 0) {
-      io.sockets.emit('liveStream', data)
-    }
-  })
-})
+  if (connections > 0 && !streamStarted) {
+    const gs_socket = net.connect(9001, () => {
+      streamStarted = true
+      gs_socket.on('close', error => {
+        console.log(`gs socket closed =>>>`, error)
+        streamStarted = false
+        // res.end()
+      })
+      gs_socket.on('data', data => {
+        io.sockets.emit('liveStream', data)
+      })
+    })
 
-gs_socket.on('error', error => {
-  console.log(`gs-error =>>>`, error)
+    gs_socket.on('error', error => {
+      console.log(`gs-error =>>>`, error)
+    })
+  }
 })
 
 // app.get('/webm', (req, res) => {
