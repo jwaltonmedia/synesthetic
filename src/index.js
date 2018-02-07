@@ -1,6 +1,8 @@
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
+const net = require('net')
+
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
@@ -9,33 +11,82 @@ const io = require('socket.io')(server)
 const spawn = require('child_process').spawn
 const NODE_PORT = 3333
 
+const args = [
+  'autovideosrc',
+  'horizontal-speed=1',
+  'is-live=true',
+  '!',
+  'videoconvert',
+  '!',
+  'vp8enc',
+  'cpu-used=5',
+  'deadline=1',
+  'keyframe-max-dist=10',
+  '!',
+  'queue',
+  'leaky=1',
+  '!',
+  'm.',
+  'autoaudiosrc',
+  '!',
+  'audioconvert',
+  '!',
+  'vorbisenc',
+  '!',
+  'queue',
+  'leaky=1',
+  '!',
+  'm.',
+  'webmmux',
+  'name=m',
+  'streamable=true',
+  '!',
+  'queue',
+  'leaky=1',
+  '!',
+  'tcpserversink',
+  'host=127.0.0.1',
+  'port=9001',
+  'sync-method=2'
+]
+const gstreamer = spawn('gst-launch-1.0', args, { stdio: 'inherit' })
+
+gstreamer.on('exit', code => {
+  if (code !== null) {
+    console.log(`GStreamer error, exit code ${code}`)
+  }
+  process.exit()
+})
+
 app.set('view engine', 'ejs')
-app.use('/', express.static(path.join(__dirname, 'stream')));
 app.get('/', (req, res) => res.render('index'))
 
-const args = ['-w', '320', '-h', '240', '-o', './stream/image.jpg', '-t', '999999999', '-tl', '10'];
-const proc = spawn('raspistill', args);
+app.get('/webm', (req, res) => {
+  const date = new Date()
 
-io.on('connection', socket => {
-
-  // TODO: support multiple sockets.
-
-  console.log(`socket connected: ${socket.id}`)
-
-  fs.watchFile('./stream/image.jpg', (current, previous) => {
-    socket.emit('liveStream', 'image.jpg?_t=' + (Math.random() * 100000));
+  res.writeHead(200, {
+    Date: date.toUTCString(),
+    Connection: 'close',
+    'Cache-Control': 'private',
+    'Content-Type': 'video/webm',
+    Server: 'CustomStreamer/0.0.1'
   })
 
-  socket.on('disconnect', () => {
-    console.log('socket disconnected')
-    fs.unwatchFile('./stream/image.jpg')
+  const socket = net.connect(9001, () => {
+    socket.on('close', error => {
+      console.log(`socket closed`, error)
+      res.end()
+    })
+    socket.on('date', data => {
+      res.write(data)
+    })
   })
 
+  socket.on('error', error => {
+    console.log(error)
+  })
 })
 
 server.listen(NODE_PORT, () => {
   console.log(`Application running on port: ${NODE_PORT}`)
 })
-
-
-

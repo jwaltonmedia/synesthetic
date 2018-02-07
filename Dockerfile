@@ -4,9 +4,9 @@ RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y lsof
 RUN apt-get install -y nano
+RUN apt-get install -y gstreamer1.0-tools
 
 RUN mkdir /src
-# RUN chmod +x docker-entrypoint.sh
 
 COPY ./src/package.json /src
 WORKDIR /src

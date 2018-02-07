@@ -7,18 +7,21 @@
   <title>Live Streaming Video</title>
 </head>
 <body>
-  <img src="" id="stream" />
+
+    <video width="320" height="240" autoplay="true" controls="controls">
+      <source src="http://10.119.82.195:3333/webm/" type="video/webm">
+    </video>
   <!-- <button onclick="startStream()">Start</button> -->
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- <script src="/socket.io/socket.io.js"></script> -->
   <script>
-    var socket = io();
-    console.log(socket);
+    // var socket = io();
+    // console.log(socket);
 
-    var image = document.getElementById('stream');
+    // var image = document.getElementById('stream');
 
-    socket.on('liveStream', function(data) {
-      image.setAttribute('src', data);
-    });
+    // socket.on('liveStream', function(data) {
+    //   image.setAttribute('src', data);
+    // });
 
   </script>
 </body>
