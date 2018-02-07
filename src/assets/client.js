@@ -66,12 +66,14 @@
     console.log('client connected')
 
     socket.on('liveStream', function(data) {
-      if (reader.readyState == 1 || sourceBufferpool.length > 0) {
-        sourceBufferpool.push(data)
-        console.log('Received buffer pooled: current size ' + sourceBufferpool.length)
-      } else {
-        sourceBuffer.appendBuffer(data)
-        console.log('First buffer processed')
+      if (mediaSource.readyState == 'open') {
+        if (sourceBufferpool.length > 0) {
+          sourceBufferpool.push(data)
+          console.log('Received buffer pooled: current size ' + sourceBufferpool.length)
+        } else {
+          sourceBuffer.appendBuffer(data)
+          console.log('First buffer processed')
+        }
       }
     })
   }
