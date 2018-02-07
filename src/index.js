@@ -49,7 +49,7 @@ const args = [
   'port=9001',
   'sync-method=2'
 ]
-const gstreamer = spawn('gst-launch-1.0', args, { stdio: 'inherit' })
+const gstreamer = spawn('gst-launch-1.0 -v -m', args, { stdio: 'inherit' })
 
 gstreamer.on('exit', code => {
   if (code !== null) {
