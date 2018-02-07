@@ -49,6 +49,7 @@ gstreamer.on('exit', code => {
 })
 
 app.set('view engine', 'ejs')
+app.use('/', express.static(path.join(__dirname, 'assets')))
 app.get('/', (req, res) => res.render('index'))
 
 let connections = 0
