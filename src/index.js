@@ -12,8 +12,6 @@ const spawn = require('child_process').spawn
 const NODE_PORT = 3333
 
 const args = [
-  '-v',
-  '-m',
   'autovideosrc',
   'horizontal-speed=1',
   'is-live=true',
@@ -32,6 +30,8 @@ const args = [
   'autoaudiosrc',
   '!',
   'audioconvert',
+  '!',
+  'pulsesink',
   '!',
   'vorbisenc',
   '!',
