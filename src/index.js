@@ -31,8 +31,6 @@ const args = [
   '!',
   'audioconvert',
   '!',
-  'pulsesink',
-  '!',
   'vorbisenc',
   '!',
   'queue',
@@ -63,31 +61,45 @@ gstreamer.on('exit', code => {
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.render('index'))
 
-app.get('/webm', (req, res) => {
-  const date = new Date()
+let connections = 0
 
-  res.writeHead(200, {
-    Date: date.toUTCString(),
-    Connection: 'close',
-    'Cache-Control': 'private',
-    'Content-Type': 'video/webm',
-    Server: 'CustomStreamer/0.0.1'
-  })
+io.on('connection', socket => {
+  console.log('connection made to socket server')
 
-  const socket = net.connect(9001, () => {
-    socket.on('close', error => {
-      console.log(`socket closed`, error)
-      res.end()
-    })
-    socket.on('data', data => {
-      res.write(data)
-    })
-  })
-
-  socket.on('error', error => {
-    console.log(error)
+  connections++
+  socket.on('disconnect', () => {
+    connections--
   })
 })
+
+const gs_socket = net.connect(9001, () => {
+  gs_socket.on('close', error => {
+    console.log(`gs socket closed =>>>`, error)
+    // res.end()
+  })
+  gs_socket.on('data', data => {
+    if (connections > 0) {
+      io.sockets.emit('liveStream', data)
+    }
+  })
+})
+
+gs_socket.on('error', error => {
+  console.log(`gs-error =>>>`, error)
+})
+
+// app.get('/webm', (req, res) => {
+//   const date = new Date()
+
+//   res.writeHead(200, {
+//     Date: date.toUTCString(),
+//     Connection: 'close',
+//     'Cache-Control': 'private',
+//     'Content-Type': 'video/webm',
+//     Server: 'CustomStreamer/0.0.1'
+//   })
+
+// })
 
 server.listen(NODE_PORT, () => {
   console.log(`Application running on port: ${NODE_PORT}`)

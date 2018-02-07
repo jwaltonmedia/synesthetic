@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Live Streaming Video</title>
 </head>
+
 <body>
-
-    <video width="320" height="240" autoplay="true" controls="controls">
-      <source src="http://10.119.82.195:3333/webm/" type="video/webm">
-    </video>
-  <!-- <button onclick="startStream()">Start</button> -->
-  <!-- <script src="/socket.io/socket.io.js"></script> -->
+  <video id="videoPlayer" width="320" height="240" preload="auto" autoplay="true" controls="controls">
+    <source src="" type="video/webm">
+  </video>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    // var socket = io();
-    // console.log(socket);
+    var socket = io();
+    console.log('client connected');
 
-    // var image = document.getElementById('stream');
+    var video = document.getElementById('videoPlayer');
 
-    // socket.on('liveStream', function(data) {
-    //   image.setAttribute('src', data);
-    // });
+    socket.on('liveStream', function (data) {
+      video.src = data
+    });
 
   </script>
 </body>
+
 </html>
