@@ -13,14 +13,12 @@
     function(e) {
       video.play()
 
-      buffer = mediaSource.addSourceBuffer('video/mp4; codecs="avc1.64001E"')
+      buffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"')
 
       buffer.addEventListener('updatestart', function(e) {
         console.log('updatestart: ' + mediaSource.readyState)
       })
-      buffer.addEventListener('update', function(e) {
-        console.log('update: ' + mediaSource.readyState)
-      })
+
       buffer.addEventListener('updateend', function(e) {
         console.log('updateend: ' + mediaSource.readyState)
       })
