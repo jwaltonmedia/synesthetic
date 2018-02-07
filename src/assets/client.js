@@ -7,7 +7,7 @@
 
   console.log('client connected', socket)
 
-  video.src = window.URL.createObjectURL(mediaSource)
+  video.getElementsByTagName('source')[0].src = window.URL.createObjectURL(mediaSource)
   mediaSource.addEventListener(
     'sourceopen',
     function(e) {
