@@ -16,6 +16,7 @@
       'sourceopen',
       function(e) {
         try {
+          video.play()
           sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"')
         } catch (e) {
           return console.log('Exception calling addSourceBuffer for video', e)
@@ -34,7 +35,7 @@
           function() {
             if (sourceBufferpool.length > 0 && !sourceBuffer.updating) {
               try {
-                sourceBuffer.appendBuffer(sourceBufferpool)
+                sourceBuffer.appendBuffer(sourceBufferpool.shift())
                 console.log('update: pooled buffer appended ' + sourceBufferpool.length + ' ' + mediaSource.readyState)
               } catch (e) {
                 console.log('Exception calling appendBuffer for video ', e)
@@ -44,7 +45,6 @@
           },
           false
         )
-
         startWSStreaming()
       },
       false
@@ -62,35 +62,15 @@
   }
 
   function startWSStreaming() {
-    var reader = new FileReader()
-
-    reader.onload = function(evt) {
-      if (sourceBuffer.updating || sourceBufferpool.length > 0) {
-        sourceBufferpool.push(new Uint8Array(evt.target.result))
-        console.log('update: pooled buffer appended ' + sourceBufferpool.length + mediaSource.readyState)
-      } else {
-        sourceBuffer.appendBuffer(new Uint8Array(evt.target.result))
-        console.log('update: direct buffer appended ' + sourceBufferpool.length + mediaSource.readyState)
-      }
-    }
-
-    reader.onloadend = function(evt) {
-      if (bufferPool.length > 0) {
-        var chunk = new Blob([bufferPool.shift()], { type: 'video/webm' })
-        evt.target.readAsArrayBuffer(chunk)
-        console.log('Processed buffer pool: current size ' + bufferPool.length)
-      }
-    }
-
     var socket = io()
     console.log('client connected')
 
     socket.on('liveStream', function(data) {
-      if (reader.readyState == 1 || bufferPool.length > 0) {
-        bufferPool.push(data)
-        console.log('Received buffer pooled: current size ' + bufferPool.length)
+      if (reader.readyState == 1 || sourceBufferpool.length > 0) {
+        sourceBufferpool.push(data)
+        console.log('Received buffer pooled: current size ' + sourceBufferpool.length)
       } else {
-        reader.readAsArrayBuffer(new Blob([data], { type: 'video/webm' }))
+        sourceBuffer.appendBuffer(data)
         console.log('First buffer processed')
       }
     })
