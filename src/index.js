@@ -62,6 +62,7 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     connections--
+    console.log('disconnection', connections)
   })
 
   if (connections > 0 && !streamStarted) {
@@ -70,7 +71,6 @@ io.on('connection', socket => {
       gs_socket.on('close', error => {
         console.log(`gs socket closed =>>>`, error)
         streamStarted = false
-        // res.end()
       })
       gs_socket.on('data', data => {
         io.sockets.emit('liveStream', data)
@@ -82,19 +82,6 @@ io.on('connection', socket => {
     })
   }
 })
-
-// app.get('/webm', (req, res) => {
-//   const date = new Date()
-
-//   res.writeHead(200, {
-//     Date: date.toUTCString(),
-//     Connection: 'close',
-//     'Cache-Control': 'private',
-//     'Content-Type': 'video/webm',
-//     Server: 'CustomStreamer/0.0.1'
-//   })
-
-// })
 
 server.listen(NODE_PORT, () => {
   console.log(`Application running on port: ${NODE_PORT}`)
