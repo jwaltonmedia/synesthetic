@@ -20,9 +20,8 @@ class VideoCamera(object):
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # # video stream.
-        # if (success == True):
-        ret, jpeg = cv2.imencode('.jpg', image)
-
-        return jpeg.tobytes()
-        # else:
-        #     return False
+        if (image != None):
+            ret, jpeg = cv2.imencode('.jpg', image)
+            return jpeg.tobytes()
+        else:
+            return ""
