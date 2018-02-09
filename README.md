@@ -1,4 +1,4 @@
-# <span style="background-color:green">s</span>.y.n.e.s.t.h.e.t.i.c.
+# `s.y.n.e.s.t.h.e.t.i.c.`
 
 `I see what you say`
 
