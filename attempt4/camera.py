@@ -1,6 +1,5 @@
 import cv2
 
-print cv2.__version__
 video = cv2.VideoCapture(0)
 
 
@@ -20,8 +19,5 @@ class VideoCamera(object):
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # # video stream.
-        if (image != None):
-            ret, jpeg = cv2.imencode('.jpg', image)
-            return jpeg.tobytes()
-        else:
-            return ""
+        ret, jpeg = cv2.imencode('.jpg', image)
+        return jpeg.tobytes()
