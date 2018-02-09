@@ -21,7 +21,7 @@ import cv2
 
 camera = PiCamera()
 camera.resolution = (320, 240)
-camera.framerate = 24
+camera.framerate = 20
 stream = PiRGBArray(camera, size=(320, 240))
 
 time.sleep(0.1)
@@ -35,11 +35,10 @@ def index():
 
 
 def gen():
-    for frame in camera.capture_continuous(stream, format="jpeg"):
-        stream.truncate()
+    for frame in camera.capture_continuous(stream, format="jpeg", use_video_port=True):
         stream.seek(0)
-        yield frame.array
         stream.truncate(0)
+        yield frame.array
 
 
 @app.route('/video_feed')
