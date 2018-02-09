@@ -1,4 +1,4 @@
-<h1><span style="color: red">s</span>.y.n.e.s.t.h.e.t.i.c.</h1>
+# <span style="background-color:green">s</span>.y.n.e.s.t.h.e.t.i.c.
 
 `I see what you say`
 
