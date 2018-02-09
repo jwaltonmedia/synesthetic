@@ -38,9 +38,8 @@ def gen():
     for frame in camera.capture_continuous(stream, format="bgr", use_video_port=True):
 
         stream.seek(0)
-        stream.truncate()
-        image = frame.array
-        yield image
+        ret, image = cv2.imencode('.jpg', frame.array)
+        yield image.tobytes()
 
         stream.seek(0)
         stream.truncate()
