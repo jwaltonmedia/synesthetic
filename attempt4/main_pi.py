@@ -14,7 +14,17 @@
 # 2. Run "python main.py".
 # 3. Navigate the browser to the local webpage.
 from flask import Flask, render_template, Response
-from camera_pi import PiCamera
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
+import cv2
+
+camera = PiCamera()
+camera.resolution = (320, 240)
+camera.framereate = 20
+rawCapture = PiRGBArray(camera, size=(320, 240))
+
+time.sleep(0.1)
 
 app = Flask(__name__)
 
@@ -24,18 +34,17 @@ def index():
     return render_template('index.html')
 
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+def gen():
+    for frame in camera.capture_continuous(rawCapture, format="jpg", use_video_port=True):
+        image = frame.array
+        yield image
+        rawCapture.truncate(0)
 
 
 @app.route('/video_feed')
 def video_feed():
 
-    camera = PiCamera()
-    return Response(gen(camera),
+    return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
